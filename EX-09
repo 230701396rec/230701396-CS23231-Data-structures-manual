@@ -1,0 +1,92 @@
+NAME:Praveen raj.M
+ROLLNO:230701396
+PROGRAM NAME:Tree traversal
+
+#include<stdio.h>
+#include<stdlib.h>
+struct tree
+{
+        int data;
+        struct tree* left;
+        struct tree* right;
+}*root=NULL;
+void insert(int);
+void inorder(struct tree* );
+void preorder(struct tree* );
+void postorder(struct tree* );
+int main()
+{
+        insert(2);
+        insert(3);
+        insert(4);
+
+        inorder(root);
+        preorder(root);
+        postorder(root); 
+}
+
+void insert(int key)
+{       int flag=0;
+
+        struct tree* parent,*ptr=root;
+        while(ptr!=NULL&&flag==0)
+        {
+                if(key<ptr->data)
+                {
+                        parent=ptr;
+                        ptr=ptr->left;
+                }
+                else if(key>ptr->data)
+                {
+                        parent=ptr;
+                        ptr=ptr->right;
+                }
+                else if(key==ptr->data)
+                {
+                        flag=1;
+                }
+        }
+struct tree* newnode;
+newnode=(struct tree*)malloc(sizeof(struct tree));
+newnode->left=NULL;
+newnode->right=NULL;
+newnode->data=key;
+if(parent==NULL)
+{
+        root=newnode;
+}
+
+else
+{
+        if(key<parent->data)
+                parent->left=newnode;
+        else if(key>parent->data)
+                parent->right=newnode;
+}
+}
+void inorder(struct tree *ptr)
+{
+        if(ptr!=NULL)
+        {
+                inorder(ptr->left);
+                printf("%d",ptr->data);
+                inorder(ptr->right);
+        }
+}
+void preorder(struct tree*ptr)
+{       
+         if(ptr!=NULL)
+           {    printf("%d",ptr->data);
+                 preorder(ptr->left);
+                 preorder(ptr->right);
+           }
+}
+void postorder(struct tree*ptr)
+{
+         if(ptr!=NULL)
+             {
+                 preorder(ptr->left);
+                 preorder(ptr->right);
+                 printf("%d",ptr->data);
+              }
+  }
