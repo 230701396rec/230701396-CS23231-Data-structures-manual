@@ -1,0 +1,104 @@
+NAME:Praveen raj M
+ROLLNO:230701396
+PROGRAM NAME:Double link list
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int data;
+    struct node*prev;
+    struct node*next;
+}*first=NULL,*last=NULL;
+
+
+void insertbeg(int);
+void insertend(int);
+void insertbet(int);
+void display();
+
+int main()
+{
+    insertbeg(396);
+    insertend(398);
+    insertbet(397);
+    display();
+}
+
+void insertbeg(int roll)
+{
+    struct node*newnode;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=roll;
+    if(first==NULL)
+    {
+        newnode->prev=NULL;
+        newnode->next=NULL;
+        first=newnode;
+        last=newnode;
+    }
+    else
+    {
+        newnode->next=first;
+        newnode->prev=NULL;
+        first->prev=newnode;
+        first=newnode;
+    }
+}
+void insertbet(int roll)
+{
+    struct node*newnode;
+    struct node*temp;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=roll;
+    temp=first;
+    if(temp!=NULL)
+    {
+        newnode->next=temp->next;
+        newnode->prev=temp;
+        temp->next=newnode;
+        if(newnode->next!=NULL)
+        {
+            newnode->prev->next=newnode;
+            
+        }
+        else
+        {
+            newnode=last;
+        }
+    }
+    else
+    {
+        printf("NO Value %d",roll);
+    }
+}
+void insertend(int roll)
+{
+    struct node*newnode;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=roll;
+    if(first==NULL)
+    {
+        newnode->prev=NULL;
+        newnode->next=NULL;
+        first=newnode;
+        last=newnode;
+    }
+    else
+    {
+        newnode->next=NULL;
+        newnode->prev=last;
+        last->next=newnode;
+        last=newnode;
+    }
+}
+void display()
+{
+    struct node*temp;
+    temp=first;
+    while(temp!=NULL)
+    {
+        printf("%d",temp->data);
+        temp=temp->next;
+    }
+}
