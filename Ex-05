@@ -1,0 +1,132 @@
+NAME:Praveen raj.M
+ROLLNO:230701396
+PROGRAM NAME:Ifix to postfix using stack
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define size 25
+int s[size];
+int top=-1;
+char input[25];
+char post[25]="";
+
+int stk_prec(char);
+int ip_prec(char);
+void Push(char);
+char Pop();
+int IsFull();
+int IsEmpty();
+void str_con(char);
+
+int main()
+{
+    int i;
+    printf("Enter the infix expression:");
+    scanf("%s",input);
+    top=0;
+    s[top]='#';
+    for (i=0;input[i]!='\0';i++)
+    {
+        if ((input[i]>='a' && input[i]<='z') || (input[i]>='A' && input[i]<='Z'))
+            str_con(input[i]);
+        else
+        {
+            while ((ip_prec(input[i]))<(stk_prec(s[top])))
+                str_con(Pop());
+            if (ip_prec(input[i])!=stk_prec(s[top]))
+                Push(input[i]);
+            else
+                Pop();
+        } 
+    }
+    if (input[i]=='\0')
+    {
+        while (s[top]!='#')
+            str_con(Pop());
+    }
+    printf("\nPostfix expression for the given expression:\n%s",post);
+}
+
+
+int IsFull(){
+    if (top==size-1)
+    return 1;
+    else
+    return 0;
+}
+
+int IsEmpty(){
+    if (top==-1)
+    return 1;
+    else
+    return 0;
+}
+
+
+void Push(char c){
+    if (!IsFull())
+    {
+        top=top+1;
+        s[top]=c;
+    }
+    else
+    printf("\nOVERFLOW\n");
+}
+
+char Pop(){
+    char del;
+    if (!IsEmpty()){
+        del=s[top];
+        top=top-1;
+    }
+    else
+    printf("\nUNDERFLOW\n");
+    return del;
+}
+
+int stk_prec(char c){
+    switch (c){
+        case '(':
+           return 0;
+        case '^':
+           return 5;
+        case '*':
+        case '/':
+           return 4;
+        case '+':
+        case '-':
+           return 2;
+        case '#':
+           return -1;
+    }
+}
+
+int ip_prec(char c)
+{
+    switch (c)
+    {
+        case '(':
+           return 7;
+        case '^':
+           return 6;
+        case '*':
+        case '/':
+           return 3;
+        case '+':
+        case '-':
+           return 1;
+        case ')':
+           return 0;
+    }
+}
+
+void str_con(char c){
+    int len=strlen(post);
+    post[len]=c;
+
+}
+
