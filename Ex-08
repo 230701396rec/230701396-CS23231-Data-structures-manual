@@ -1,0 +1,233 @@
+NAME:Praveen raj.M
+ROLLNO:230701396
+PROGRAM NAME:Binary search tree
+
+#include<stdio.h>
+#include<stdlib.h>
+
+struct tree
+{
+int data;
+struct tree *left;
+struct tree *right;
+}*root=NULL;
+
+void insert();
+void display();
+void search();
+void delete();
+struct tree * inorder_succ(struct tree *);
+
+void insert()
+{
+    struct tree *parent,*ptr=root;
+    int value;
+    int flag=0;
+    printf("Enter the value to be inserted");
+    scanf("%d",&value);
+   
+    while(ptr!=NULL && flag==0)
+    {
+        if(value<ptr->data)
+        {
+            parent=ptr;
+            ptr=ptr->left;
+        }
+        else if(value>ptr->data)
+        {
+            parent=ptr;
+            ptr=ptr->right;
+        }
+        else if(value==ptr->data)
+        {
+            printf("No duplicate value");
+            flag=1;
+        }
+    }
+    struct tree *newnode;
+    newnode=malloc(sizeof(struct tree));
+    newnode->data=value;
+   
+    if(parent==NULL)
+    {
+        root=newnode;
+    }
+    else if(value<parent->data)
+    {
+        parent->left=newnode;
+    }
+    else
+    {
+        parent->right=newnode;
+    }
+}
+
+
+void display(struct tree *ptr)
+{
+    if(ptr!=NULL)
+    {
+        display(ptr->left);
+        printf(" %d ",ptr->data);
+        display(ptr->right);
+    }
+}
+
+void search()
+{
+    int flag=0;
+    int value;
+    struct tree *parent,*ptr=root;
+    printf("Enter the Value to be searched\n");
+    scanf("%d",&value);
+
+    while(ptr!=NULL && flag==0)
+    {
+        if(value<ptr->data)
+        {
+            parent=ptr;
+            ptr=ptr->left;
+        }
+        else if(value>ptr->data)
+        {
+            parent=ptr;
+            ptr=ptr->right;
+        }
+        else if(value==ptr->data)
+        {
+            flag=1;
+            printf("%d is found",ptr->data);
+        }
+    }
+    if(flag==0)
+    printf("Value not found");
+}
+
+
+void delete(struct tree *ptr,int key)
+{
+    struct tree *parent=NULL;
+    int flag=0;
+    while(ptr!=NULL && flag==0)
+    {
+        if(key<ptr->data)
+        {
+            parent=ptr;
+            ptr=ptr->left;
+        }
+        else if(key>ptr->data)
+        {
+            parent=ptr;
+            ptr=ptr->right;
+        }
+        else if(key==ptr->data)
+        {
+        flag=1;
+        }
+    }
+    if(flag==0)
+    printf("Required Key does not exist");
+    else
+    {
+        if(ptr->left==NULL && ptr->right==NULL )
+        {
+            if(parent==NULL)
+            {
+                root=NULL;
+            }
+            else if (key<parent->data)
+                parent->left =NULL;
+            else
+                parent->right=NULL;
+            free(ptr);
+        }
+        else if(ptr->left==NULL || ptr->right==NULL )
+        {
+            if(parent==NULL)
+            {
+                if(ptr->right==NULL)
+                    root=ptr->left;
+                else
+                    root=ptr->right;
+            }
+        }
+        else if(key<parent->data)
+             {
+                if (ptr->left!=NULL)
+                    parent->left=ptr->left;
+                else
+                    parent->left=ptr->right;
+             }
+         else if(key>parent->data)
+             {
+                 if (ptr->left!=NULL)
+                    parent->right=ptr->left;
+                else
+                    parent->right=ptr->right;
+             }
+         else if(ptr->left!=NULL && ptr->right!=NULL )
+         {
+             struct tree*new_ptr;
+             new_ptr=inorder_succ(ptr->right);
+             int save=new_ptr->data;
+             delete(ptr,new_ptr->data);
+             ptr->data=save;
+         }
+     
+     
+    }
+}
+
+struct tree *inorder_succ(struct tree *pt)
+{
+   
+    while(pt->left!=NULL)
+    {
+       
+       pt=pt->left;
+         
+    }
+    return pt;
+}
+
+
+
+
+
+int main()
+    {
+        int ans=1,key;
+        struct tree *ptr=NULL;
+        int choice;
+        do
+            {
+                printf("Enter your choice:-\n1.Insert\n2.Delete\n3.Display\n4.Search");
+                scanf("%d",&choice);
+                switch(choice)
+                {
+                    case 1:
+                    insert();
+                    break;
+
+                    case 2:
+                    printf("\nEnter the value to be deleted\n");
+                    scanf("%d",&key);
+                    ptr=root;
+                    delete(ptr,key);
+                    break;
+
+                    case 3:
+                    ptr=root;
+                    display(ptr);
+                    break;
+
+                    case 4:
+                    search();
+                    break;
+
+                }
+                printf("\nWant to continue?\nPress 0.NO \t 1.YES\n");
+                scanf("%d",&ans);
+            }
+            while(ans==1);
+    }
